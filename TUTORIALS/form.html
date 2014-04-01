@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Testing</title>
+    <meta charset="UTF-8">
+    <meta name=description content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+<div class="container">
+    <div class="col-md-4">
+        <h1>Insert Data</h1>
+
+        <form method="POST" role="form" action="processForm.php" id="myContactForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" name="name" id="name" placeholder="Type your name" required>
+                <label for="number">Number</label>
+                <input type="number" class="form-control" name="number" id="number" placeholder="Type your number">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Type your email" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Insert</button>
+            <button type="reset" class="btn btn-danger" id="clear">Reset</button>
+        </form>
+    </div>
+
+    <div class="col-md-4 col-lg-push-1">
+        <h1>Server Response</h1>
+
+        <div id="response"></div>
+    </div>
+</div>
+
+
+<!-- jQuery -->
+<script src="jquery.js"></script>
+<!-- Bootstrap JavaScript -->
+<script src="bootstrap.min.js"></script>
+<script>
+    $myContactForm = $("#myContactForm");
+    $myContactForm.find('button[type="reset"]')
+            .click(function () {
+                $myContactForm.find('button[type="submit"]')
+                        .text('Insert')
+                        .attr("enabled", true);
+            });
+
+    $myContactForm.submit(function (event) {
+        /* stop form from submitting normally */
+        event.preventDefault();
+
+        /* get some values from elements on the page: */
+        var $form = $(this),
+                $submit = $form.find('button[type="submit"]'),
+                name_value = $form.find('input[name="name"]').val(),
+                email_value = $form.find('input[name="email"]').val(),
+                number_value = $form.find('input[name="number"]').val(),
+                url = $form.attr('action');
+
+        /* Send the data using post */
+        var posting = $.post(url, {
+            name: name_value,
+            email: email_value,
+            number: number_value
+        });
+
+        posting.done(function (data) {
+            /* Put the results in a div */
+            $("#response").html(data);
+
+            /* Change the button text. */
+            $submit.text('Inserted, Thank you!');
+
+            /* Disable the button. */
+            $submit.attr("disabled", true);
+        });
+    });
+</script>
+</body>
+</html>
