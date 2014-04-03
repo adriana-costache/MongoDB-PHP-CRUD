@@ -13,6 +13,8 @@
     var div_message = $("#divMessage");
     var table_searchResult_body = $("#tableSearchResult").find("tbody");
 
+    var deleteUrl = "processDeleteBook.php";
+
 
     /* When the Submit Button is clicked - this action is taken care of */
     form_searchBookForm.submit(function (event) {
@@ -63,6 +65,42 @@
         /* Send the data using post */
         var posting = $.post(url, dataToSend);
 
+        /**
+         * This function gets called
+         * @param data
+         * @param message
+         */
+        var showSuccessMessage = function (data, message) {
+            div_message
+                .html(data)
+                .parent('div')
+                .removeClass('hidden')
+                .removeClass('alert-danger')
+                .addClass('alert-success');
+
+            div_serverResponse
+                .html(message)
+                .parent('div')
+                .removeClass('hidden');
+        };
+
+        var failCallback = function (jqXHR) {
+            div_serverResponse
+                .html('')
+                .parent('div')
+                .addClass('hidden');
+
+            var message = "<h1 class='bg-warning text-info'>Status: " + jqXHR.statusText
+                + "</h1><h2>Response: </h2><p>" + jqXHR.responseText + "</p>";
+
+            div_message
+                .html(message)
+                .parent('div')
+                .removeClass('hidden')
+                .removeClass('alert-success')
+                .addClass('alert-danger');
+        };
+
         /* Handle Success Response from the Server */
         posting.done(function (data, textStatus, jqXHR) {
             // Server returns the Json, so decode/parse it into a JavaScript object
@@ -94,6 +132,26 @@
                 );
             }
 
+            var deleteRequest = function (bookNumber) {
+                var book = books[bookNumber];
+                var dataToDelete = {
+                    '_id': book._id.$id
+                };
+
+                var posting = $.post(deleteUrl, dataToDelete);
+
+                /* Handle Success Response from the Server */
+                posting.done(function (data, textStatus, jqXHR) {
+                    var message = "<h3 class= 'bg-success text-muted'> Delete Successful: </h3>";
+                    showSuccessMessage(data, message);
+                });
+
+                /* Handle Failure Response from the Server */
+                posting.fail(function (jqXHR) {
+                    failCallback(jqXHR);
+                });
+            };
+
             // Make the table editable
             $('#tableSearchResult').editableTableWidget();
             $(table_searchResult_body).find('.updateBookInfo').click(function(){
@@ -102,42 +160,18 @@
             });
             $(table_searchResult_body).find('.deleteBookInfo').click(function(){
                 var bookNumber = $(this).parent('td').parent('tr').find('.bookNumber').html();
-                alert('You want to delete' + bookNumber);
+                deleteRequest(bookNumber);
             });
 
             // Show server responses
-            div_message
-                .html(data)
-                .parent('div')
-                .removeClass('hidden')
-                .removeClass('alert-danger')
-                .addClass('alert-success');
-
             var message = "<h3 class= 'bg-success text-muted'> Search Successful:"
-                + "</h3><p> Found Total Number of Books: " + jqXHR.getResponseHeader('X-FOUND-BOOKS') + "</p >"
-
-            div_serverResponse
-                .html(message)
-                .parent('div')
-                .removeClass('hidden');
+                + "</h3><p> Found Total Number of Books: " + jqXHR.getResponseHeader('X-FOUND-BOOKS') + "</p >";
+            showSuccessMessage(data, message);
         });
 
         /* Handle Failure Response from the Server */
         posting.fail(function (jqXHR) {
-            div_serverResponse
-                .html('')
-                .parent('div')
-                .addClass('hidden');
-
-            var message = "<h1 class='bg-warning text-info'>Status: " + jqXHR.statusText
-                + "</h1><h2>Response: </h2><p>" + jqXHR.responseText + "</p>";
-
-            div_message
-                .html(message)
-                .parent('div')
-                .removeClass('hidden')
-                .removeClass('alert-success')
-                .addClass('alert-danger');
+            failCallback(jqXHR);
         });
     });
 })();
