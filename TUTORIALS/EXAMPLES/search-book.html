@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Books</title>
+    <meta charset="UTF-8">
+    <meta name=description content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="../library/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../library/css/bootstrap-tagsinput.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- This is the search form - this is visible by default -->
+            <h2 class="text-center text-info">Search a Book</h2>
+
+            <form action="processSearchBook.php" method="POST" id="searchBookForm">
+                <div class="row well">
+                    <div class="form-group">
+                        <label>Book Title</label>
+                        <input type="text" class="form-control" name="bookTitle">
+
+                        <label>Book author(s)</label>
+
+                        <div>
+                            <input type="text" class="form-control" name="bookAuthors"
+                                   data-role="tagsinput" placeholder="Add author(s)">
+                        </div>
+
+                        <label>Edition Number</label>
+                        <input type="number" class="form-control" name="bookEdition">
+
+                        <label>Published On</label>
+                        <input type="number" class="form-control" name="bookPublishedOn">
+
+                        <label>Language</label>
+                        <input type="text" class="form-control" name="bookLanguage">
+
+                        <label>Publisher</label>
+                        <input type="text" class="form-control" name="bookPublisher">
+
+                        <label>ISBN</label>
+
+                        <div>
+                            <input type="text" class="form-control" name="bookIsbn"
+                                   data-role="tagsinput" placeholder="Add Isbn(s)">
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-success btn-block">Search</button>
+                        </div>
+                        <div class="col-md-6 pull-right">
+                            <button type="reset" class="btn btn-danger btn-block">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- This is the RIGHT half of the page which shows the Server Responses -->
+        <div class="col-md-6 pull-right">
+
+            <div class="alert alert-info hidden">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Request Received By Server</strong>
+
+                <div id="divMessage"></div>
+            </div>
+            <div class="alert alert-success hidden">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Server Response</strong>
+
+                <div id="divServerResponse"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- This is the editable table for updating book details, this is shown only if search result is positive -->
+    <div class="row">
+        <div>
+            <h2 class="text-center text-success">Your Book Info</h2>
+            <p class="text-info">Click on the table fields to edit.
+                Do not forget to Click Update to save the changes to the server</p>
+            <table id="tableSearchResult" class="table table-hover table-responsive table-bordered">
+                <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Title</th>
+                    <th>Authors</th>
+                    <th>Edition</th>
+                    <th>PublishedOn</th>
+                    <th>Language</th>
+                    <th>Publisher</th>
+                    <th>Isbn</th>
+                    <th>Description</th>
+                    <th>Cover</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="../library/js/jquery.js"></script>
+<!-- Bootstrap JavaScript -->
+<script src="../library/js/bootstrap.min.js"></script>
+<script src="../library/js/bootstrap-tagsinput.min.js"></script>
+<script src="../library/js/mindmup-editabletable.js"></script>
+<!-- Register Book Script -->
+<script src="search-book.js"></script>
+<script>
+    $('#tableSearchResult').editableTableWidget();
+</script>
+</body>
+</html>

@@ -43,7 +43,7 @@ class MongoCrud
                 $this->setMongoCollection($collection);
             }
         } catch (MongoException $e) {
-            die('Failed to Create MongoDB Connection\r\n' . $e->getMessage());
+            die($this->sendErrorResponse(503, 'Failed to Create MongoDB Connection\r\n' . $e->getMessage()));
         }
     }
 
@@ -86,7 +86,7 @@ class MongoCrud
                 ->insert($document, $options); // insert a new document
             return $document['_id']; // Return the _id of the newly created document
         } catch (MongoException $e) {
-            die('Failed to Insert Data into MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
+            return $this->sendErrorResponse('Failed to Insert Data into MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
         }
     }
 
@@ -102,7 +102,7 @@ class MongoCrud
                 ->findOne($query);
             return $doc;
         } catch (MongoException $e) {
-            die('Failed to Insert Data into MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
+            return $this->sendErrorResponse('Failed to Insert Data into MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
         }
     }
 
@@ -111,7 +111,7 @@ class MongoCrud
      * @param $fieldsToRetrieve
      * @return MongoCursor
      */
-    public function find($query, $fieldsToRetrieve)
+    public function find($query, $fieldsToRetrieve = array())
     {
         try {
             $cursor = $this->database
@@ -119,7 +119,7 @@ class MongoCrud
                 ->find($query, $fieldsToRetrieve);;
             return $cursor;
         } catch (MongoException $e) {
-            die('Failed to Insert Data into MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
+            return $this->sendErrorResponse('Failed to Insert Data into MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
         }
     }
 
@@ -136,7 +136,7 @@ class MongoCrud
                 ->selectCollection($this->collection)
                 ->save($document);
         } catch (MongoException $e) {
-            die('Failed to Insert Data into MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
+            return $this->sendErrorResponse('Failed to Insert Data into MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
         }
 
     }
@@ -169,8 +169,14 @@ class MongoCrud
                 ->remove($query, $options); // remove a document
             return $r;
         } catch (MongoException $e) {
-            die('Failed to Delete Data from MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
+            return $this->sendErrorResponse('Failed to Delete Data from MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
         }
+    }
+
+    private function sendErrorResponse($code = 500, $message)
+    {
+        http_response_code($code);
+        return $message;
     }
 
 } 
