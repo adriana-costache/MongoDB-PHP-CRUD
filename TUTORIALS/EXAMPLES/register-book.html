@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register a Book</title>
+    <meta charset="UTF-8">
+    <meta name=description content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="../library/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../library/css/bootstrap-tagsinput.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <h2 class="text-center text-info">Register your Book</h2>
+
+        <form action="processRegisterBook.php" method="POST" id="registerBookForm">
+            <div class="row well">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Book Title</label>
+                        <input type="text" class="form-control" name="bookTitle" required>
+
+                        <label>Book author(s)</label>
+
+                        <div>
+                            <input type="text" class="form-control" name="bookAuthors" required
+                                   data-role="tagsinput" placeholder="Add author(s)">
+                        </div>
+
+                        <label>Edition Number</label>
+                        <input type="number" class="form-control" name="bookEdition">
+
+                        <label>Published On</label>
+                        <input type="number" class="form-control" name="bookPublishedOn">
+
+                        <label>Language</label>
+                        <input type="text" class="form-control" name="bookLanguage">
+
+                        <label>Publisher</label>
+                        <input type="text" class="form-control" name="bookPublisher">
+
+                        <label>ISBN</label>
+
+                        <div>
+                            <input type="text" class="form-control" name="bookIsbn"
+                                   data-role="tagsinput" placeholder="Add Isbn(s)">
+                        </div>
+
+                        <label>Description</label>
+                        <textarea class="form-control" name="bookDescription" cols="30" rows="5"></textarea>
+
+                        <label>Select a Cover</label>
+                        <input type="file" class="" name="bookCover">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-success btn-block">Insert</button>
+                        </div>
+                        <div class="col-md-6 pull-right">
+                            <button type="reset" class="btn btn-danger btn-block">Reset</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pull-right">
+
+                    <div class="alert alert-info hidden">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <strong>Request Received By Server</strong>
+
+                        <div id="divMessage"></div>
+                    </div>
+                    <div class="alert alert-success hidden">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <strong>Server Response</strong>
+
+                        <div id="divServerResponse"></div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+        </form>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="../library/js/jquery.js"></script>
+<!-- Bootstrap JavaScript -->
+<script src="../library/js/bootstrap.min.js"></script>
+<script src="../library/js/bootstrap-tagsinput.min.js"></script>
+<!-- Register Book Script -->
+<script src="register-book.js"></script>
+</body>
+</html>
