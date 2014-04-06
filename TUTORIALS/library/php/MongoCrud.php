@@ -138,8 +138,27 @@ class MongoCrud
         } catch (MongoException $e) {
             return $this->sendErrorResponse('Failed to Insert Data into MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
         }
-
     }
+
+    /**
+     * Update records based on a given criteria
+     *
+     * @param array $query
+     * @param array $newDocument
+     * @param array $options
+     * @return bool
+     */
+    public function update(array $query, array $newDocument, array $options = array())
+    {
+        try {
+            return $this->database
+                ->selectCollection($this->collection)
+                ->update($query, $newDocument, $options);
+        } catch (MongoException $e) {
+            return $this->sendErrorResponse('Failed to Insert Data into MongoDB Collection ' . $this->collection . '\r\n' . $e->getMessage());
+        }
+    }
+
 
     /**
      * This is a helper method that will delete a document based on the given criteria
